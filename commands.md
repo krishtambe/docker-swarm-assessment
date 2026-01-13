@@ -6,106 +6,151 @@ docker swarm init
 ```
 
 
-Join worker nodes:
+ - Join worker nodes:
 
+```
 docker swarm join --token <token> <manager-ip>:2377
+```
 
-Create encrypted overlay networks
+ - Create encrypted overlay networks
+```
 docker network create -d overlay --opt encrypted public_net
 docker network create -d overlay --opt encrypted frontend_net
 docker network create -d overlay --opt encrypted backend_net
 docker network create -d overlay --opt encrypted monitoring_net
-
-Create secrets
+```
+- Create secrets
+```
 echo postgres | docker secret create db_user -
 echo StrongPass123 | docker secret create db_password -
+```
 
+- Verify:
 
-Verify:
-
+```
 docker secret ls
+```
 
-Deploy stack
+ - Deploy stack
+
+```
 docker stack deploy -c docker-compose.yml voting
+```
 
+- Verify:
 
-Verify:
-
+```
 docker stack ls
 docker service ls
+```
 
-🔍 Functional Testing
-Check service health
+- Functional Testing
+  - Check service health
+```
 docker service ps voting_vote
 docker service ps voting_worker
 docker service ps voting_postgres
+```
 
-Verify application
+- Verify application
+
+```
 curl http://app.example.com
 curl http://app.example.com/api/health
+```
 
-Verify DNS-based service discovery
+- Verify DNS-based service discovery
+
+```
 docker exec -it $(docker ps -q -f name=voting_vote) ping postgres
+```
 
-🔐 Security & Network Testing
-Ensure frontend cannot reach DB
+- Security & Network Testing
+- Ensure frontend cannot reach DB
+
+```
 docker run -it --rm --network frontend_net alpine ping postgres
+```
 
+- (Expected: fails)
 
-(Expected: fails)
-
+```
 docker run -it --rm --network backend_net alpine ping postgres
+```
 
 
-(Expected: works)
+- (Expected: works)
+-  Monitoring Validation
 
-📊 Monitoring Validation
+```
 docker service ls | grep prometheus
 docker service ls | grep grafana
+```
 
+- Access Grafana:
 
-Access Grafana:
-
+```
 http://<node-ip>:3000
+```
 
-🔄 Rolling Update Test
+- Rolling Update Test
+
+```
 docker service update \
   --image ghcr.io/org/backend:v2 \
   --update-parallelism 2 \
   --update-delay 10s \
   voting_backend
+```
 
-❌ Simulate Failure & Auto-Rollback
+- Simulate Failure & Auto-Rollback
+
+```
 docker service update --image ghcr.io/org/backend:broken voting_backend
+```
 
 
-Check rollback:
+- Check rollback:
 
+```
 docker service ps voting_backend
+```
 
-🔁 Manual Rollback
+- Manual Rollback
+
+```
 docker service rollback voting_backend
+```
 
-🧯 Troubleshooting
+- Troubleshooting
+
+```
 docker service logs voting_backend
 docker service ps voting_backend --no-trunc
 docker inspect <task-id>
+```
 
-🧰 Portainer Automation
+- Portainer Automation
 
-Deploy stack:
+- Deploy stack:
 
+```
 ./scripts/portainer-stack.sh
+```
 
-💾 Backup & Restore Swarm
+- Backup & Restore Swarm
 
-Backup:
+- Backup:
 
+```
 tar czf swarm-backup.tgz /var/lib/docker/swarm
+```
 
 
-Restore:
+- Restore:
 
+```
 systemctl stop docker
 tar xzf swarm-backup.tgz -C /var/lib/docker
 systemctl start docker
+```
