@@ -22,6 +22,13 @@ These features provide high availability, service discovery, rolling updates, an
 
 2. Kubernetes Equivalents
 | Docker Swarm | Kubernetes |
+| ------| ---------- |
+| Service | More complex   |
+| Built-in routing | Needs Ingress  |
+| Limited ecosystem | Large ecosystem |
+|	Fewer policies | Advanced network policies |
+   
+| Docker Swarm | Kubernetes |
 | ------------ | ---------- |
 | Service | Deployment |
 | Stateful service (Postgres) | StatefulSet |
