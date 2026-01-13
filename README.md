@@ -62,21 +62,21 @@ docker service ls | grep grafana
 
 ## Swarm-Specific Considerations & Trade-offs
 
-Why Swarm?
+- Why Swarm?
 
- Docker Swarm provides:
+  - Docker Swarm provides:
 
- Native clustering
+  - Native clustering
 
- Built-in service discovery
+  - Built-in service discovery
 
- Rolling updates
+  - Rolling updates
 
- Secrets management
+  - Secrets management
 
- Simpler operational model than Kubernetes
+  - Simpler operational model than Kubernetes
 
-- Trade-offs vs Kubernetes
+## Trade-offs vs Kubernetes
 
 | Swarm | Kubernetes |
 | ------| ---------- |
@@ -97,25 +97,35 @@ Why Swarm?
   ## Migration Strategy Rationale
   The migration to Kubernetes uses a phased approach to avoid downtime.
 
-Reasons:
+- Reasons:
 
-Swarm and Kubernetes can run in parallel
+  - Swarm and Kubernetes can run in parallel
 
-DNS cutover allows rollback
+  - DNS cutover allows rollback
 
-Data integrity is preserved
+  - Data integrity is preserved
 
-Key mappings:
+- Key mappings:
 
-Swarm services → Kubernetes Deployments
+  - Swarm services → Kubernetes Deployments
 
-Swarm secrets → Kubernetes Secrets
+  - Swarm secrets → Kubernetes Secrets
 
-Overlay networks → CNI & Network Policies
+  - Overlay networks → CNI & Network Policies
 
-Traefik → Kubernetes Ingress
+  - Traefik → Kubernetes Ingress
 
-This allows gradual validation before full cutover.
+  - This allows gradual validation before full cutover.
+
+ ## Assumptions & Design Choices
+ | Area | Assumption |
+ | TLS | Let’s Encrypt used |
+ | Registry | GHCR used |
+ | Secrets | Managed via Swarm |
+ | Monitoring | Prometheus + Grafana |
+ | Logging | Fluentd |
+ | Cloud | Linux-based nodes |
+ | Traffic | HTTP/HTTPS only|
 	
 	
 	
