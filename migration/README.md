@@ -21,17 +21,17 @@
 These features provide high availability, service discovery, rolling updates, and security.
 
 2. Kubernetes Equivalents
-| Docker Swarm                | Kubernetes                |
-| --------------------------- | ------------------------- |
-| Service                     | Deployment                |
-| Stateful service (Postgres) | StatefulSet               |
-| Swarm secrets               | Kubernetes Secrets        |
-| Swarm configs               | ConfigMaps                |
-| Overlay networks            | CNI (Calico/Flannel)      |
-| Traefik                     | Ingress Controller        |
-| Volumes                     | PersistentVolume + PVC    |
-| Placement constraints       | Node selectors & affinity |
-| Rolling updates             | RollingUpdate strategy    |
+| Docker Swarm | Kubernetes |
+| ------------ | ---------- |
+| Service | Deployment |
+| Stateful service (Postgres) | StatefulSet |
+| Swarm secrets | Kubernetes Secrets |
+| Swarm configs | ConfigMaps |
+| Overlay networks | CNI (Calico/Flannel) |
+| Traefik | Ingress Controller |
+| Volumes | PersistentVolume + PVC |
+| Placement constraints | Node selectors & affinity |
+| Rolling updates | RollingUpdate strategy |
 
 3. Migration Approach
    - Phased migration is preferred over big-bang.
@@ -46,10 +46,10 @@ These features provide high availability, service discovery, rolling updates, an
 This avoids production outage
 
 4. Tooling
-| Tool    | Purpose                            |
-| ------- | ---------------------------------- |
+| Tool | Purpose |
+| ---- | ------- |
 | Kompose | Convert docker-compose to k8s YAML |
-| Helm    | Package deployments                |
+| Helm | Package deployments |
 
 5. Testing Strategy
    • Deploy Swarm & Kubernetes in parallel
@@ -71,20 +71,20 @@ This avoids production outage
   - Containers continue running
 
 7. Risks
-| Risk             | Mitigation        |
-| ---------------- | ----------------- |
-| Data loss        | DB snapshots      |
+| Risk | Mitigation |
+| ---- | ---------- |
+| Data loss | DB snapshots |
 | Network policies | Test in staging   |
-| TLS failure      | Dual certificates |
-| Performance      | Load testing      |
+| TLS failure | Dual certificates |
+| Performance | Load testing |
 
 8. Timeline
-| Phase          | Time    |
-| -------------- | ------- |
-| Cluster setup  | 1 day   |
+| Phase | Time |
+| ----- | ---- |
+| Cluster setup | 1 day   |
 | Data migration | 1 day   |
 | App deployment | 1 day   |
-| Validation     | 1 day   |
-| Cutover        | 0.5 day |
+| Validation | 1 day   |
+| Cutover | 0.5 day |
 
 
