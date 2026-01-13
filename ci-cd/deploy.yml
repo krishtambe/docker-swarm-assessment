@@ -1,40 +1,55 @@
+# Name of the CI/CD workflow
 name: Swarm CI/CD
 
+# Trigger the workflow on push events to the main branch
 on:
   push:
     branches: [main]
 
+# Define the jobs to be run in the workflow
 jobs:
   build:
+    # Specify the environment for the job to run on
     runs-on: ubuntu-latest
     steps:
+      # Checkout the repository code
       - uses: actions/checkout@v4
 
+      # Step to build Docker images
       - name: Build images
         run: |
+          # Build the frontend image
           docker build -t ghcr.io/org/frontend:latest ./vote
+          # Build the backend image
           docker build -t ghcr.io/org/backend:latest ./backend
 
+      # Step to perform a security scan on the backend image
       - name: Security Scan
         run: docker scan ghcr.io/org/backend:latest || true
 
+      # Step to login to GitHub Container Registry
       - name: Login to GHCR
         run: echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u USERNAME --password-stdin
 
+      # Step to push the built images to the registry
       - name: Push
         run: |
+          # Push the frontend image
           docker push ghcr.io/org/frontend:latest
+          # Push the backend image
           docker push ghcr.io/org/backend:latest
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      # Step for manual approval before deployment
       - name: Manual Approval
         uses: chrnorm/deployment-action@v2
         with:
           environment: production
 
+      # Step to deploy the application via Portainer
       - name: Deploy via Portainer
         run: |
           ./scripts/portainer-stack.sh

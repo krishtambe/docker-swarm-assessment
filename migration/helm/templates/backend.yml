@@ -1,19 +1,27 @@
+# Define the API version for the deployment
 apiVersion: apps/v1
+# Specify the kind of resource
 kind: Deployment
 metadata:
+  # Name of the deployment
   name: backend
   labels:
+    # Labels for the deployment
     app: backend
 spec:
+  # Number of replicas for the deployment
   replicas: {{ .Values.backend.replicas }}
   selector:
     matchLabels:
+      # Selector to match the labels of the pods
       app: backend
   strategy:
+    # Deployment strategy
     type: RollingUpdate
   template:
     metadata:
       labels:
+        # Labels for the pod template
         app: backend
     spec:
       containers:

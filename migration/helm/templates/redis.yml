@@ -1,50 +1,50 @@
-apiVersion: apps/v1
-kind: StatefulSet
+apiVersion: apps/v1  # API version for StatefulSet
+kind: StatefulSet  # Resource type
 metadata:
-  name: redis
+  name: redis  # Name of StatefulSet
 spec:
-  serviceName: redis
-  replicas: 1
+  serviceName: redis  # Service name
+  replicas: 1  # Number of replicas
   selector:
     matchLabels:
-      app: redis
+      app: redis  # Label selector
   template:
     metadata:
       labels:
-        app: redis
+        app: redis  # Pod labels
     spec:
       containers:
-      - name: redis
-        image: redis:7
+      - name: redis  # Container name
+        image: redis:7  # Redis image version
         ports:
-          - containerPort: 6379
+          - containerPort: 6379  # Port number
         volumeMounts:
-          - name: redis-data
-            mountPath: /data
+          - name: redis-data  # Volume name
+            mountPath: /data  # Mount path
         resources:
           requests:
-            cpu: "100m"
-            memory: "128Mi"
+            cpu: "100m"  # CPU request
+            memory: "128Mi"  # Memory request
           limits:
-            cpu: "300m"
-            memory: "256Mi"
+            cpu: "300m"  # CPU limit
+            memory: "256Mi"  # Memory limit
   volumeClaimTemplates:
   - metadata:
-      name: redis-data
+      name: redis-data  # PVC name
     spec:
-      accessModes: ["ReadWriteOnce"]
+      accessModes: ["ReadWriteOnce"]  # Access mode
       resources:
         requests:
-          storage: 2Gi
+          storage: 2Gi  # Storage size
 ---
-apiVersion: v1
-kind: Service
+apiVersion: v1  # API version for Service
+kind: Service  # Resource type
 metadata:
-  name: redis
+  name: redis  # Service name
 spec:
-  clusterIP: None
+  clusterIP: None  # Headless service
   selector:
-    app: redis
+    app: redis  # Pod selector
   ports:
-    - port: 6379
-      targetPort: 6379
+    - port: 6379  # Service port
+      targetPort: 6379  # Target port

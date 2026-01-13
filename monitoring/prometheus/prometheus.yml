@@ -1,9 +1,9 @@
-global:
-  scrape_interval: 15s
+global:  # Global Prometheus configuration
+  scrape_interval: 15s  # Interval to scrape metrics
 
-scrape_configs:
-- job_name: node
-  dns_sd_configs:
-    - names: ['tasks.node-exporter']
-      type: A
-      port: 9100
+scrape_configs:  # Scrape job configurations
+- job_name: node  # Job name for node exporter
+  dns_sd_configs:  # DNS service discovery configuration
+    - names: ['tasks.node-exporter']  # Service name for discovery
+      type: A  # DNS record type
+      port: 9100  # Port for node exporter metrics

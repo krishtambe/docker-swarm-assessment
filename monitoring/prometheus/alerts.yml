@@ -1,21 +1,21 @@
-groups:
-- name: swarm-alerts
-  rules:
+groups:  # Alert group definitions
+- name: swarm-alerts  # Group name for Swarm alerts
+  rules:  # Alert rules
 
-  - alert: ServiceDown
-    expr: count(up == 0) > 0
-    for: 1m
-    labels:
-      severity: critical
+  - alert: ServiceDown  # Alert name for service down
+    expr: count(up == 0) > 0  # Condition: count instances where up is 0
+    for: 1m  # Duration threshold before alert fires
+    labels:  # Alert labels
+      severity: critical  # Severity level of the alert
 
-  - alert: HighMemory
-    expr: container_memory_usage_bytes > 0.9 * container_spec_memory_limit_bytes
-    for: 2m
-    labels:
-      severity: warning
+  - alert: HighMemory  # Alert name for high memory usage
+    expr: container_memory_usage_bytes > 0.9 * container_spec_memory_limit_bytes  # Condition: memory usage above 90%
+    for: 2m  # Duration threshold before alert fires
+    labels:  # Alert labels
+      severity: warning  # Severity level of the alert
 
-  - alert: NodeDown
-    expr: up{job="node-exporter"} == 0
-    for: 1m
-    labels:
-      severity: critical
+  - alert: NodeDown  # Alert name for node down
+    expr: up{job="node-exporter"} == 0  # Condition: node-exporter is down
+    for: 1m  # Duration threshold before alert fires
+    labels:  # Alert labels
+      severity: critical  # Severity level of the alert

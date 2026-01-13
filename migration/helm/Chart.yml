@@ -1,3 +1,3 @@
-apiVersion: v2
-name: voting-app
-version: 1.0.0
+apiVersion: v2  # Helm chart API version
+name: voting-app  # Name of the chart
+version: 1.0.0  # Chart version

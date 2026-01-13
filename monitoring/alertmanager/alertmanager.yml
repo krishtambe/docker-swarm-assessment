@@ -1,12 +1,12 @@
-global:
-  resolve_timeout: 5m
+global:  # Global configuration settings
+  resolve_timeout: 5m  # Time to wait before marking alerts as resolved
 
-route:
-  receiver: "admin"
+route:  # Alert routing rules
+  receiver: "admin"  # Default receiver for alerts
 
-receivers:
-- name: "admin"
-  email_configs:
-  - to: admin@example.com
-    from: swarm@example.com
-    smarthost: smtp.example.com:25
+receivers:  # List of alert receivers
+- name: "admin"  # Receiver name
+  email_configs:  # Email notification configuration
+  - to: admin@example.com  # Recipient email address
+    from: swarm@example.com  # Sender email address
+    smarthost: smtp.example.com:25  # SMTP server address

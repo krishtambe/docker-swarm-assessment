@@ -1,19 +1,28 @@
+# Define the API version for the deployment
 apiVersion: apps/v1
+# Specify the kind of resource
 kind: Deployment
 metadata:
+  # Name of the deployment
   name: frontend
 spec:
+  # Number of replicas for the deployment
   replicas: {{ .Values.frontend.replicas }}
   selector:
     matchLabels:
+      # Selector to match the labels of the pods
       app: frontend
   template:
     metadata:
       labels:
+        # Labels for the pod template
         app: frontend
     spec:
+      # Specification for the pod containers
       containers:
       - name: frontend
+        # Docker image for the frontend container
         image: dockersamples/examplevotingapp_vote
         ports:
         - containerPort: 80
+        # Port that the container listens on

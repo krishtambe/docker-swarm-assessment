@@ -1,32 +1,47 @@
+# Define the API version for the Ingress resource
 apiVersion: networking.k8s.io/v1
+# Specify the kind of resource
 kind: Ingress
 metadata:
+  # Name of the Ingress resource
   name: voting-ingress
   annotations:
+    # Specify the Ingress class to use
     kubernetes.io/ingress.class: traefik
+    # Define the entry points for the Traefik router
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    # Enable TLS for the router
     traefik.ingress.kubernetes.io/router.tls: "true"
+    # Specify middlewares for the router
     traefik.ingress.kubernetes.io/router.middlewares: default-ratelimit@kubernetescrd,default-secure@kubernetescrd
 spec:
   tls:
   - hosts:
+      # Define the host for the TLS configuration
       - app.example.com
+    # Name of the secret containing the TLS certificate
     secretName: voting-tls
   rules:
   - host: app.example.com
     http:
       paths:
       - path: /
+        # Specify the path type for the Ingress rule
         pathType: Prefix
         backend:
           service:
+            # Name of the service for the frontend
             name: frontend
             port:
+              # Port number for the frontend service
               number: 80
       - path: /api
+        # Specify the path type for the Ingress rule
         pathType: Prefix
         backend:
           service:
+            # Name of the service for the backend
             name: backend
             port:
+              # Port number for the backend service
               number: 5000
