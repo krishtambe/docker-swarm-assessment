@@ -47,6 +47,7 @@ These features provide high availability, service discovery, rolling updates, an
 This avoids production outage
 
 4. Tooling
+   
 | Tool | Purpose |
 | ---- | ------- |
 | Kompose | Convert docker-compose to k8s YAML |
@@ -72,14 +73,16 @@ This avoids production outage
   - Containers continue running
 
 7. Risks
+   
 | Risk | Mitigation |
 | ---- | ---------- |
 | Data loss | DB snapshots |
-| Network policies | Test in staging   |
+| Network policies | Test in staging |
 | TLS failure | Dual certificates |
 | Performance | Load testing |
 
 8. Timeline
+   
 | Phase | Time |
 | ----- | ---- |
 | Cluster setup | 1 day   |
