@@ -94,7 +94,7 @@ docker service ls | grep grafana
 
   - Teams without Kubernetes expertise
 
-  ## Migration Strategy Rationale
+## Migration Strategy Rationale
   The migration to Kubernetes uses a phased approach to avoid downtime.
 
 - Reasons:
@@ -119,6 +119,7 @@ docker service ls | grep grafana
 
  ## Assumptions & Design Choices
  | Area | Assumption |
+ | ---- | ---------- |
  | TLS | Let’s Encrypt used |
  | Registry | GHCR used |
  | Secrets | Managed via Swarm |
