@@ -1,0 +1,21 @@
+groups:
+- name: swarm-alerts
+  rules:
+
+  - alert: ServiceDown
+    expr: count(up == 0) > 0
+    for: 1m
+    labels:
+      severity: critical
+
+  - alert: HighMemory
+    expr: container_memory_usage_bytes > 0.9 * container_spec_memory_limit_bytes
+    for: 2m
+    labels:
+      severity: warning
+
+  - alert: NodeDown
+    expr: up{job="node-exporter"} == 0
+    for: 1m
+    labels:
+      severity: critical

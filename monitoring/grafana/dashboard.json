@@ -1,0 +1,10 @@
+{
+  "title": "Docker Swarm Overview",
+  "panels": [
+    { "type": "graph", "title": "Service Replicas", "targets": [{"expr":"swarm_service_replicas"}] },
+    { "type": "graph", "title": "CPU Usage", "targets": [{"expr":"node_cpu_seconds_total"}] },
+    { "type": "graph", "title": "Memory", "targets": [{"expr":"container_memory_usage_bytes"}] },
+    { "type": "graph", "title": "Restarts", "targets": [{"expr":"container_restart_count"}] },
+    { "type": "graph", "title": "Network", "targets": [{"expr":"container_network_receive_bytes_total"}] }
+  ]
+}

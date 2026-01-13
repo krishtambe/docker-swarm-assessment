@@ -1,0 +1,12 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: "admin"
+
+receivers:
+- name: "admin"
+  email_configs:
+  - to: admin@example.com
+    from: swarm@example.com
+    smarthost: smtp.example.com:25

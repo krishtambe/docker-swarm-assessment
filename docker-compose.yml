@@ -1,0 +1,116 @@
+version: "3.8"
+
+networks:
+  public_net:
+    external: true
+  frontend_net:
+    external: true
+  backend_net:
+    external: true
+  monitoring_net:
+    external: true
+
+volumes:
+  pgdata:
+  redisdata:
+  prometheus_data:
+  grafana_data:
+  traefik_acme:
+
+secrets:
+  db_user:
+    external: true
+  db_password:
+    external: true
+
+services:
+
+  traefik:
+    image: traefik:v3.0
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.swarmMode=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.le.acme.httpchallenge=true"
+      - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.le.acme.email=admin@example.com"
+      - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik_acme:/letsencrypt
+    networks:
+      - public_net
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+
+  vote:
+    image: dockersamples/examplevotingapp_vote
+    networks:
+      - frontend_net
+    deploy:
+      replicas: 3
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.vote.rule=Host(`app.example.com`) && PathPrefix(`/`)"
+        - "traefik.http.services.vote.loadbalancer.server.port=80"
+        - "traefik.http.services.vote.loadbalancer.sticky=true"
+
+  result:
+    image: dockersamples/examplevotingapp_result
+    networks:
+      - frontend_net
+    deploy:
+      replicas: 2
+
+  worker:
+    image: dockersamples/examplevotingapp_worker
+    networks:
+      - backend_net
+    deploy:
+      replicas: 2
+
+  postgres:
+    image: postgres:15
+    networks:
+      - backend_net
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    secrets:
+      - db_user
+      - db_password
+    environment:
+      POSTGRES_USER_FILE: /run/secrets/db_user
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    deploy:
+      replicas: 1
+
+  redis:
+    image: redis:7
+    networks:
+      - backend_net
+    volumes:
+      - redisdata:/data
+    deploy:
+      replicas: 1
+
+  prometheus:
+    image: prom/prometheus
+    networks:
+      - monitoring_net
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+
+  grafana:
+    image: grafana/grafana
+    networks:
+      - monitoring_net
+    volumes:
+      - grafana_data:/var/lib/grafana

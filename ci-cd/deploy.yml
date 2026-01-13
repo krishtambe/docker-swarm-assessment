@@ -1,0 +1,40 @@
+name: Swarm CI/CD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build images
+        run: |
+          docker build -t ghcr.io/org/frontend:latest ./vote
+          docker build -t ghcr.io/org/backend:latest ./backend
+
+      - name: Security Scan
+        run: docker scan ghcr.io/org/backend:latest || true
+
+      - name: Login to GHCR
+        run: echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u USERNAME --password-stdin
+
+      - name: Push
+        run: |
+          docker push ghcr.io/org/frontend:latest
+          docker push ghcr.io/org/backend:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Manual Approval
+        uses: chrnorm/deployment-action@v2
+        with:
+          environment: production
+
+      - name: Deploy via Portainer
+        run: |
+          ./scripts/portainer-stack.sh
