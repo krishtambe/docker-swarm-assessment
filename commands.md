@@ -1,6 +1,9 @@
-🚀 Deployment Commands
-Initialize Docker Swarm
+## Deployment Commands
+
+- Initialize Docker Swarm
+```
 docker swarm init
+```
 
 
 Join worker nodes:
